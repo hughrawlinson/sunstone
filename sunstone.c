@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <errno.h>
 #include <stdbool.h>
-#include <json_object.h>
 
 void getReadFrom(char* filename, int argc, char *argv[]) {
   strcpy(filename, "./testinput.txt");
@@ -15,13 +14,7 @@ void getReadFrom(char* filename, int argc, char *argv[]) {
   }
 }
 
-int main(int argc, char *argv[]) {
-  char filename[512];
-
-  getReadFrom(filename, argc, argv);
-
-  printf("%s\n", filename);
-
+FILE *getTTYHandler(char filename[]) {
   FILE *fptr;
   fptr = fopen(filename, "rb");
 
@@ -30,12 +23,13 @@ int main(int argc, char *argv[]) {
 
     exit(1);
   }
+  return fptr;
+}
 
+void getFirstTelegram(FILE *fptr) {
   bool started = false;
   bool finished = false;
-  char* telegram[5000];
-
-  json_object obj = json_object_new_object();
+  /* char* telegram[5000]; */
 
   while (!finished) {
     char line[1000];
@@ -48,11 +42,20 @@ int main(int argc, char *argv[]) {
     finished = true;
     printf("%s\n", line);
   }
+}
 
-  printf("%s\n", obj);
+int main(int argc, char *argv[]) {
+  char filename[512];
+
+  getReadFrom(filename, argc, argv);
+
+  printf("%s\n", filename);
+
+  FILE *fptr = getTTYHandler(filename);
+
+  getFirstTelegram(fptr);
 
   fclose(fptr);
-  json_object_put(obj);
   exit(EXIT_SUCCESS);
 }
 
