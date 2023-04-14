@@ -1,15 +1,17 @@
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 #include <errno.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-void getReadFrom(char* filename, int argc, char *argv[]) {
+void getReadFrom(char *filename, int argc, char *argv[]) {
   strcpy(filename, "./testinput.txt");
 
-  for (int i = 0; i < argc; i++) {
+  int i;
+
+  for (i = 0; i < argc; i++) {
     if (strncmp("--tty=", argv[i], strlen("--tty=")) == 0) {
-      strcpy(filename, argv[i]+6);
+      strcpy(filename, argv[i] + 6);
     }
   }
 }
@@ -58,4 +60,3 @@ int main(int argc, char *argv[]) {
   fclose(fptr);
   exit(EXIT_SUCCESS);
 }
-
